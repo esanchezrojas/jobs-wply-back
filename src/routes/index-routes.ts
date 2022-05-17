@@ -9,8 +9,11 @@ class IndexRoutes{
         this.config();
 
     }
+
     config(): void{
         this.router.get('/',indexController.index);
+        this.router.post('/',indexController.signup);
+        this.router.post('/',indexController.signin);
     }
 
 }

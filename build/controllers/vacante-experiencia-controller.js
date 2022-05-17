@@ -36,7 +36,7 @@ class ExperienciaController {
         return __awaiter(this, void 0, void 0, function* () {
             yield conection_db_1.default.query('INSERT INTO vacante_hv_experiencia set ?', [req.body]);
             console.log(req.body);
-            res.json({ message: 'Experiencia guardada' });
+            res.json({ message: 'Experiencia guardada', validacion: true });
         });
     }
     update(req, res) {

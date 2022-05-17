@@ -33,7 +33,7 @@ class ExperienciaController {
 
         await db.query('INSERT INTO vacante_hv_experiencia set ?', [req.body]);
         console.log(req.body);
-        res.json({ message: 'Experiencia guardada' });
+        res.json({ message: 'Experiencia guardada',validacion: true });
     }
 
 

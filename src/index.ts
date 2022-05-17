@@ -1,4 +1,5 @@
 import express, { Application } from 'express';
+import dotenv from 'dotenv';
 import morgan from 'morgan';
 import cors from 'cors';
 import indexRoutes from './routes/index-routes';
@@ -7,10 +8,15 @@ import experienciaRoutes from './routes/vacante-experiencia-routes';
 import formacionRoutes from './routes/vacante-formacion-routes';
 //const express = require('express')
 
+//Inicializamos las variables de entorno .env
+dotenv.config();
+console.log(process.env.TESTING)
 class Server {
+
 
     public app: Application;
     constructor() {
+    
         this.app = express();
         this.config();
         this.routes();
@@ -26,12 +32,13 @@ class Server {
         //Express.json es una funcion que ya trae la ultima version de express, antes se hacia con bodyparser
         this.app.use(express.json());
         this.app.use(express.urlencoded({extended:false}))
+        
 
     }
 
 
     routes(): void {
-        this.app.use('/',indexRoutes)
+        this.app.use('/index',indexRoutes)
         this.app.use('/api/publicVacantes',vacantesRoutes)
         this.app.use('/api/experiencia',experienciaRoutes)
         this.app.use('/api/formacion',formacionRoutes)

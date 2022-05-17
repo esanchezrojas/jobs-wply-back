@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const dotenv_1 = __importDefault(require("dotenv"));
 const morgan_1 = __importDefault(require("morgan"));
 const cors_1 = __importDefault(require("cors"));
 const index_routes_1 = __importDefault(require("./routes/index-routes"));
@@ -11,6 +12,9 @@ const publicacion_vacantes_routes_1 = __importDefault(require("./routes/publicac
 const vacante_experiencia_routes_1 = __importDefault(require("./routes/vacante-experiencia-routes"));
 const vacante_formacion_routes_1 = __importDefault(require("./routes/vacante-formacion-routes"));
 //const express = require('express')
+//Inicializamos las variables de entorno .env
+dotenv_1.default.config();
+console.log(process.env.TESTING);
 class Server {
     constructor() {
         this.app = (0, express_1.default)();
@@ -18,6 +22,7 @@ class Server {
         this.routes();
     }
     config() {
+        // Middlewares
         this.app.set('port', process.env.PORT || 3000);
         //Morgan se utiliza para ver detalles y logs de cada peticion
         this.app.use((0, morgan_1.default)('dev'));
@@ -27,7 +32,7 @@ class Server {
         this.app.use(express_1.default.urlencoded({ extended: false }));
     }
     routes() {
-        this.app.use('/', index_routes_1.default);
+        this.app.use('/index', index_routes_1.default);
         this.app.use('/api/publicVacantes', publicacion_vacantes_routes_1.default);
         this.app.use('/api/experiencia', vacante_experiencia_routes_1.default);
         this.app.use('/api/formacion', vacante_formacion_routes_1.default);
