@@ -17,19 +17,21 @@ const conection_db_1 = __importDefault(require("../conection-db"));
 class VacantesController {
     list(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            // const responsabilidades = await db.query('SELECT * FROM vacantes_beneficios WHERE id = ?',[20220506])
-            //console.log('Estas son las responsabilidades',responsabilidades)
-            const sql = yield conection_db_1.default.query('SELECT a.reqpersonal_id as id,a.nombre as nombreVacante,a.imagen,a.cantidad,a.proposito,a.horario,a.descripcion,b.nombre as ciudad, c.nombre as area FROM vacante_publicacion a LEFT JOIN ciudades b ON a.ciudad_id = b.id LEFT JOIN area c ON a.area_id = c.id LEFT JOIN contrato d ON a.tipocontrato_id = d.id WHERE a.estado = "A"');
-            for (let i = 0; i < sql.length; i++) {
-                const beneficio = yield conection_db_1.default.query('SELECT a.descripcion FROM vacante_beneficio a WHERE vacantepub_id = ?', [sql[i].id]);
-                const responsabilidad = yield conection_db_1.default.query('SELECT a.descripcion FROM vacante_responsabilidad a WHERE vacantepub_id = ?', [sql[i].id]);
-                const conocimiento = yield conection_db_1.default.query('SELECT a.descripcion FROM vacante_conocimiento a WHERE vacantepub_id = ?', [sql[i].id]);
-                sql[i].beneficios = beneficio;
-                sql[i].responsabilidades = responsabilidad;
-                sql[i].conocimientos = conocimiento;
+            try {
+                const sql = yield conection_db_1.default.query('SELECT a.reqpersonal_id as id,a.nombre as nombreVacante,a.imagen,a.cantidad,a.proposito,a.horario,a.descripcion,b.nombre as ciudad, b.id as ciudad_id, c.nombre as area FROM vacante_publicacion a LEFT JOIN ciudades b ON a.ciudad_id = b.id LEFT JOIN area c ON a.area_id = c.id LEFT JOIN contrato d ON a.tipocontrato_id = d.id WHERE a.estado = "A"');
+                for (let i = 0; i < sql.length; i++) {
+                    const beneficio = yield conection_db_1.default.query('SELECT a.descripcion FROM vacante_beneficio a WHERE vacantepub_id = ?', [sql[i].id]);
+                    const responsabilidad = yield conection_db_1.default.query('SELECT a.descripcion FROM vacante_responsabilidad a WHERE vacantepub_id = ?', [sql[i].id]);
+                    const conocimiento = yield conection_db_1.default.query('SELECT a.descripcion FROM vacante_conocimiento a WHERE vacantepub_id = ?', [sql[i].id]);
+                    sql[i].beneficios = beneficio;
+                    sql[i].responsabilidades = responsabilidad;
+                    sql[i].conocimientos = conocimiento;
+                }
+                res.status(200).json(sql);
             }
-            // res.json('list a games');
-            res.json(sql);
+            catch (error) {
+                res.status(500).json(error);
+            }
         });
     }
     getOne(req, res) {
@@ -45,9 +47,30 @@ class VacantesController {
     }
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield conection_db_1.default.query('INSERT INTO vacante_hv_experiencia set ?', [req.body]);
             console.log(req.body);
-            res.json({ message: 'Experiencia guardada' });
+            res.json({ message: 'Vacante guardada' });
+            /*
+    
+           console.log('este es el body ',req.body.registroIni)
+           const registroInicial = req.body.registroIni;
+           const registroExperiencia = req.body.experiencia;
+           const registroFormacion = req.body.formacion;
+    
+          await registroExperiencia.forEach((element:any) => {
+             const ciudad =   db.query('SELECT ciudad_nom From ciudad WHERE ciudad_nom = ? Limit 1',element.ciudad_nom)
+             const id =   db.query('SELECT ciudad_id From ciudad WHERE ciudad_nom = ? Limit 1',element.ciudad_nom)
+             console.log('Esta es la ciuda del elemento ',element)
+            db.query('INSERT INTO vacante_hv_experiencia set ?', [element]);
+         });
+    
+         await registroFormacion.forEach((element:any) => {
+            db.query('INSERT INTO vacante_hv_formacion set ?', [element]);
+         });
+    
+         await db.query('INSERT INTO vacante_hv set ?', [registroInicial]);
+    
+         res.json({ message: 'Vacante guardada' });
+         */
         });
     }
     update(req, res) {

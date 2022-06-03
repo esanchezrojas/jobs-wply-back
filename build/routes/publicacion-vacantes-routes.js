@@ -8,6 +8,7 @@ class VacantesRoutes {
         this.config();
     }
     config() {
+        //this.router.get('/',middleware,vacantesController.list );
         this.router.get('/', publicacion_vacantes_controller_1.vacantesController.list);
         this.router.get('/:id', publicacion_vacantes_controller_1.vacantesController.getOne);
         this.router.post('/', publicacion_vacantes_controller_1.vacantesController.create);

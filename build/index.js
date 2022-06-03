@@ -11,6 +11,8 @@ const index_routes_1 = __importDefault(require("./routes/index-routes"));
 const publicacion_vacantes_routes_1 = __importDefault(require("./routes/publicacion-vacantes-routes"));
 const vacante_experiencia_routes_1 = __importDefault(require("./routes/vacante-experiencia-routes"));
 const vacante_formacion_routes_1 = __importDefault(require("./routes/vacante-formacion-routes"));
+const listas_routes_1 = __importDefault(require("./routes/listas-routes"));
+const upload_routes_1 = __importDefault(require("./routes/upload-routes"));
 //const express = require('express')
 //Inicializamos las variables de entorno .env
 dotenv_1.default.config();
@@ -23,9 +25,10 @@ class Server {
     }
     config() {
         // Middlewares
-        this.app.set('port', process.env.PORT || 3000);
+        this.app.set('port', process.env.PORT || 3004);
         //Morgan se utiliza para ver detalles y logs de cada peticion
         this.app.use((0, morgan_1.default)('dev'));
+        //Cors se utiliza para recivir peticiones desde otros dominios
         this.app.use((0, cors_1.default)());
         //Express.json es una funcion que ya trae la ultima version de express, antes se hacia con bodyparser
         this.app.use(express_1.default.json());
@@ -36,6 +39,8 @@ class Server {
         this.app.use('/api/publicVacantes', publicacion_vacantes_routes_1.default);
         this.app.use('/api/experiencia', vacante_experiencia_routes_1.default);
         this.app.use('/api/formacion', vacante_formacion_routes_1.default);
+        this.app.use('/api/listas', listas_routes_1.default);
+        this.app.use('/api/upload', upload_routes_1.default);
     }
     start() {
         this.app.listen(this.app.get('port'), () => {
@@ -45,3 +50,6 @@ class Server {
 }
 const server = new Server();
 server.start();
+function UploadRoutes(arg0, UploadRoutes) {
+    throw new Error('Function not implemented.');
+}
