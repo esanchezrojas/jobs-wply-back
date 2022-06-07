@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import {uploadController } from '../controllers/upload-controller';
-import multer from '../libs/multer';
+import { uploadController } from '../controllers/upload-controller';
+import multer from '../middlewares/multer';
 
 class UploadRoutes {
 
@@ -10,17 +10,16 @@ class UploadRoutes {
         this.config();
     }
 
-    
+
     config(): void {
 
         //this.router.get('/',middleware,vacantesController.list );
-        
-       this.router.post('/',multer.single('files'),uploadController.guardar);
 
-        //this.router.post('/',uploadController.guardar);
-        this.router.get('/',uploadController.list);
-      
-        
+        this.router.post('/', multer.single('files'), uploadController.guardar);
+        this.router.get('/', uploadController.list);
+        this.router.put('/', uploadController.update);
+
+
     }
 
 }

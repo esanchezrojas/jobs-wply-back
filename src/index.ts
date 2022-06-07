@@ -9,6 +9,8 @@ import experienciaRoutes from './routes/vacante-experiencia-routes';
 import formacionRoutes from './routes/vacante-formacion-routes';
 import listasRoutes from './routes/listas-routes';
 import uploadRoutes from './routes/upload-routes';
+import loginRoutes from './routes/login-routes';
+import singinRoutes from './routes/singin-routes';
 //const express = require('express')
 
 //Inicializamos las variables de entorno .env
@@ -48,6 +50,8 @@ class Server {
         this.app.use('/api/formacion',formacionRoutes)
         this.app.use('/api/listas',listasRoutes)
         this.app.use('/api/upload',uploadRoutes)
+        this.app.use('/api/login',loginRoutes)
+        this.app.use('/api/singin',singinRoutes)
     }
 
     start(): void {

@@ -13,6 +13,8 @@ const vacante_experiencia_routes_1 = __importDefault(require("./routes/vacante-e
 const vacante_formacion_routes_1 = __importDefault(require("./routes/vacante-formacion-routes"));
 const listas_routes_1 = __importDefault(require("./routes/listas-routes"));
 const upload_routes_1 = __importDefault(require("./routes/upload-routes"));
+const login_routes_1 = __importDefault(require("./routes/login-routes"));
+const singin_routes_1 = __importDefault(require("./routes/singin-routes"));
 //const express = require('express')
 //Inicializamos las variables de entorno .env
 dotenv_1.default.config();
@@ -41,6 +43,8 @@ class Server {
         this.app.use('/api/formacion', vacante_formacion_routes_1.default);
         this.app.use('/api/listas', listas_routes_1.default);
         this.app.use('/api/upload', upload_routes_1.default);
+        this.app.use('/api/login', login_routes_1.default);
+        this.app.use('/api/singin', singin_routes_1.default);
     }
     start() {
         this.app.listen(this.app.get('port'), () => {

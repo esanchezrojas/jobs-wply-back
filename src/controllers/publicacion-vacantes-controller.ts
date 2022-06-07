@@ -1,34 +1,40 @@
 import { Request, Response } from 'express';
 import db from '../conection-db'
+import { ModeloExperiencia } from '../models/form-experiencia.model'
 
 class VacantesController {
 
+
+    constructor(
+
+    ) { }
+
     public async list(req: Request, res: Response) {
 
-        try{
+        try {
 
-        const sql = await db.query('SELECT a.reqpersonal_id as id,a.nombre as nombreVacante,a.imagen,a.cantidad,a.proposito,a.horario,a.descripcion,b.nombre as ciudad, b.id as ciudad_id, c.nombre as area FROM vacante_publicacion a LEFT JOIN ciudades b ON a.ciudad_id = b.id LEFT JOIN area c ON a.area_id = c.id LEFT JOIN contrato d ON a.tipocontrato_id = d.id WHERE a.estado = "A"');
-        
- for (let i = 0; i < sql.length; i++) {
+            const sql = await db.query('SELECT a.reqpersonal_id as id,a.nombre as nombreVacante,a.imagen,a.cantidad as c_vacantes,a.proposito,a.horario,a.descripcion,b.nombre as ciudad, b.id as ciudad_id, c.nombre as area FROM vacante_publicacion a LEFT JOIN ciudades b ON a.ciudad_id = b.id LEFT JOIN area c ON a.area_id = c.id LEFT JOIN contrato d ON a.tipocontrato_id = d.id WHERE a.estado = "A"');
 
-            const beneficio = await db.query('SELECT a.descripcion FROM vacante_beneficio a WHERE vacantepub_id = ?', [sql[i].id]);
+            for (let i = 0; i < sql.length; i++) {
 
-             const responsabilidad = await db.query('SELECT a.descripcion FROM vacante_responsabilidad a WHERE vacantepub_id = ?', [sql[i].id]);
+                const beneficio = await db.query('SELECT a.descripcion FROM vacante_beneficio a WHERE vacantepub_id = ?', [sql[i].id]);
 
-            const conocimiento = await db.query('SELECT a.descripcion FROM vacante_conocimiento a WHERE vacantepub_id = ?', [sql[i].id]);
+                const responsabilidad = await db.query('SELECT a.descripcion FROM vacante_responsabilidad a WHERE vacantepub_id = ?', [sql[i].id]);
+
+                const conocimiento = await db.query('SELECT a.descripcion FROM vacante_conocimiento a WHERE vacantepub_id = ?', [sql[i].id]);
 
 
-            sql[i].beneficios = beneficio;
-            sql[i].responsabilidades = responsabilidad;
-            sql[i].conocimientos = conocimiento;
-            
+                sql[i].beneficios = beneficio;
+                sql[i].responsabilidades = responsabilidad;
+                sql[i].conocimientos = conocimiento;
+
+            }
+
+            res.status(200).json(sql);
+
+        } catch (error) {
+            res.status(500).json(error)
         }
-      
-        res.status(200).json(sql);
-
-    }catch(error){
-        res.status(500).json(error)
-    }
 
     }
 
@@ -49,36 +55,70 @@ class VacantesController {
     }
 
 
-
+    /**
+     * Guarda los datos del formulario de las vacantes
+     * @param req ontienes los datos de la perticion post
+     * @param res responde el mensaje de la petición post
+     */
     public async create(req: Request, res: Response) {
 
-        console.log(req.body)
-        res.json({ message: 'Vacante guardada' });
-        
-        /*
+        //console.log(req.body)
+        //res.json({ message: 'Vacante guardada' });
+        // console.log('este es el body ',req.body.registroIni)
 
-       console.log('este es el body ',req.body.registroIni)
-       const registroInicial = req.body.registroIni;
-       const registroExperiencia = req.body.experiencia;
-       const registroFormacion = req.body.formacion;
+        try {
 
-      await registroExperiencia.forEach((element:any) => {
-         const ciudad =   db.query('SELECT ciudad_nom From ciudad WHERE ciudad_nom = ? Limit 1',element.ciudad_nom)
-         const id =   db.query('SELECT ciudad_id From ciudad WHERE ciudad_nom = ? Limit 1',element.ciudad_nom)
-         console.log('Esta es la ciuda del elemento ',element)
-        db.query('INSERT INTO vacante_hv_experiencia set ?', [element]);
-     });
 
-     await registroFormacion.forEach((element:any) => {
-        db.query('INSERT INTO vacante_hv_formacion set ?', [element]);
-     });
+            const registroInicial = req.body.registroIni;
+            const registroExperiencia = req.body.experiencia;
+            const registroFormacion = req.body.formacion;
 
-     await db.query('INSERT INTO vacante_hv set ?', [registroInicial]);
+            /*
+            let modelE = new ModeloExperiencia();
+            modelE.vacantehv_id = registroExperiencia.vacantehv_id;
+            modelE.empresa = registroExperiencia.empresa;
+            modelE.cargo = registroExperiencia.cargo;
+            modelE.ciudad_id = registroExperiencia.ciudad_id;
+            modelE.descripcion = registroExperiencia.descripcion;
+            modelE.anio_ini = registroExperiencia.anio_ini;
+            //modelE.actualmente = registroExperiencia.actualmente;
+            modelE.anio_fin = registroExperiencia.anio_fin;
+            modelE.mes_fin = registroExperiencia.mes_fin;
+            
 
-     res.json({ message: 'Vacante guardada' });
-     */
-      
+
+            if (registroExperiencia.actualmente == true) {
+                modelE.actualmente = 'S';
+                console.log(modelE.actualmente)
+                console.log('Sí trabaja aqui actualmente')
+            } else {
+                modelE.actualmente = 'N';
+                console.log(modelE.actualmente)
+                console.log('No trabaja aqui actualmente')
+            }
+            */
+
+            console.log(registroExperiencia)
+
+
+            await registroExperiencia.forEach((element: any) => {
+                db.query('INSERT INTO vacante_hv_experiencia set ?', [element]);
+            });
+            /*
+           await registroFormacion.forEach((element: any) => {
+               db.query('INSERT INTO vacante_hv_formacion set ?', [element]);
+           });
+
+           await db.query('INSERT INTO vacante_hv set ?', [registroInicial]);
+           */
+            res.json({ message: 'Vacante guardada' });
+
+        } catch (error) {
+            res.status(500).json(error)
+        }
+
     }
+
 
 
     public update(req: Request, res: Response) {
