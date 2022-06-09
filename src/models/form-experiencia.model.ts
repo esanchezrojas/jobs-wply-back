@@ -3,7 +3,7 @@ export class ModeloExperiencia {
     vacantehv_id?: string;
     empresa?: string;
     cargo?: string;
-    ciudad_id?:string;
+    ciudad_id?: number;
     descripcion?: string;
     anio_ini?: string;
     mes_ini?: string;

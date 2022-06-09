@@ -14,8 +14,8 @@ const vacante_formacion_routes_1 = __importDefault(require("./routes/vacante-for
 const listas_routes_1 = __importDefault(require("./routes/listas-routes"));
 const upload_routes_1 = __importDefault(require("./routes/upload-routes"));
 const login_routes_1 = __importDefault(require("./routes/login-routes"));
-const singin_routes_1 = __importDefault(require("./routes/singin-routes"));
-//const express = require('express')
+const signin_routes_1 = __importDefault(require("./routes/signin-routes"));
+const signup_routes_1 = __importDefault(require("./routes/signup-routes"));
 //Inicializamos las variables de entorno .env
 dotenv_1.default.config();
 console.log(process.env.TESTING);
@@ -44,7 +44,8 @@ class Server {
         this.app.use('/api/listas', listas_routes_1.default);
         this.app.use('/api/upload', upload_routes_1.default);
         this.app.use('/api/login', login_routes_1.default);
-        this.app.use('/api/singin', singin_routes_1.default);
+        this.app.use('/api/signin', signin_routes_1.default);
+        this.app.use('/api/signup', signup_routes_1.default);
     }
     start() {
         this.app.listen(this.app.get('port'), () => {
@@ -54,6 +55,3 @@ class Server {
 }
 const server = new Server();
 server.start();
-function UploadRoutes(arg0, UploadRoutes) {
-    throw new Error('Function not implemented.');
-}

@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken'
 import db from '../conection-db'
 import { GeneralData } from '../config/general-data';
 
-class SinginController {
+class SigninController {
 
     public async list(req: Request, res: Response) {
         let sql: any = {};
@@ -27,7 +27,7 @@ class SinginController {
      * @param res 
      * @returns 
      */
-    async singin(req: Request, res: Response) {
+    async signin(req: Request, res: Response) {
 
         const { userName, pass } = req.body;
         await db.query('select a.userName,a.roleId from user a where userName = ? and pass = ?', [userName, pass]).then(user => {
@@ -40,8 +40,8 @@ class SinginController {
                 console.log('Ingresó en el esle')
                 //const newToken = jwt.sign({ userId, username }, config.jwtSecret, { expiresIn: '1h' });
                 /**Recive un dato tipo object, clave secreta y tiempo que expira */
-                const token: any = jwt.sign({ user }, process.env.TOKEN_SECRET || GeneralData.SECRET,{expiresIn: 120});
-                return res.json({token,message:'Mensaje valido',status:200});
+                const token: any = jwt.sign({ user }, process.env.TOKEN_SECRET || GeneralData.SECRET,{expiresIn:'1h'});
+                return res.json({token,message:'Inicio de sesión correcto',status:200});
 
             }
 
@@ -61,4 +61,4 @@ class SinginController {
 
 
 
-export const singinController = new SinginController();
+export const signinController = new SigninController();

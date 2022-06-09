@@ -13,11 +13,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.uploadController = void 0;
+const googleDriveService_1 = require("../libs/googleDriveService");
 const conection_db_1 = __importDefault(require("../conection-db"));
 class UploadController {
     guardar(req, res) {
-        var _a, _b;
         return __awaiter(this, void 0, void 0, function* () {
+            const urlDrive = yield googleDriveService_1.GoogleDriveService.uploadToGoogleDrive(req.file);
+            //  console.log(req.file?.path,'este es el nombre path')
+            console.log(urlDrive);
+            res.json({
+                message: urlDrive
+            });
             /*
                 const {title,description} = req.body;
                 console.log(req.file?.path)
@@ -31,16 +37,18 @@ class UploadController {
             
                 console.log(newPhoto)
             */
-            try {
-                console.log((_a = req.file) === null || _a === void 0 ? void 0 : _a.path);
-                const nomArchivo = (_b = req.file) === null || _b === void 0 ? void 0 : _b.path;
-                const archivo = { nomarchivo_hv: nomArchivo };
-                yield conection_db_1.default.query('INSERT INTO vacante_hv set ?  ', [archivo]);
-                return res.json({ message: 'Upload correcto' });
-            }
-            catch (err) {
-                console.log(err);
-            }
+            /*
+             try {
+                 console.log(req.file?.path);
+                 const nomArchivo = req.file?.path
+                 const archivo = { nomarchivo_hv: nomArchivo }
+                 await db.query('INSERT INTO vacante_hv set ?  ', [archivo]);
+                 return res.json({ message: 'Upload correcto' });
+             } catch (err) {
+                 console.log(err)
+             }
+     
+     */
         });
     }
     list(req, res) {

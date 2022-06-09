@@ -1,9 +1,9 @@
 import { validacionToken } from './../middlewares/validacionToken';
 import { Router } from 'express';
-import {singinController } from '../controllers/singin-controllers';
+import {signupController } from '../controllers/signup-controllers';
 
 
-class SinginRoutes {
+class SignupRoutes {
 
     public router: Router = Router();
 
@@ -16,14 +16,14 @@ class SinginRoutes {
 
         //this.router.get('/',middleware,vacantesController.list );
         
-        this.router.get('/',singinController.list );
-       this.router.post('/',singinController.singin);
+        this.router.get('/',signupController.list );
+       this.router.post('/',signupController.signup);
        
         
     }
 
 }
 
-const singinRoutes = new SinginRoutes();
+const signupRoutes = new SignupRoutes();
 
-export default singinRoutes.router;
+export default signupRoutes.router;

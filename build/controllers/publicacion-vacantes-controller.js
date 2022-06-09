@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.vacantesController = void 0;
 const conection_db_1 = __importDefault(require("../conection-db"));
+const form_experiencia_model_1 = require("../models/form-experiencia.model");
 class VacantesController {
     constructor() { }
     list(req, res) {
@@ -60,34 +61,50 @@ class VacantesController {
                 const registroInicial = req.body.registroIni;
                 const registroExperiencia = req.body.experiencia;
                 const registroFormacion = req.body.formacion;
-                /*
-                let modelE = new ModeloExperiencia();
-                modelE.vacantehv_id = registroExperiencia.vacantehv_id;
-                modelE.empresa = registroExperiencia.empresa;
-                modelE.cargo = registroExperiencia.cargo;
-                modelE.ciudad_id = registroExperiencia.ciudad_id;
-                modelE.descripcion = registroExperiencia.descripcion;
-                modelE.anio_ini = registroExperiencia.anio_ini;
-                //modelE.actualmente = registroExperiencia.actualmente;
-                modelE.anio_fin = registroExperiencia.anio_fin;
-                modelE.mes_fin = registroExperiencia.mes_fin;
-                
-    
-    
-                if (registroExperiencia.actualmente == true) {
-                    modelE.actualmente = 'S';
-                    console.log(modelE.actualmente)
-                    console.log('Sí trabaja aqui actualmente')
-                } else {
-                    modelE.actualmente = 'N';
-                    console.log(modelE.actualmente)
-                    console.log('No trabaja aqui actualmente')
-                }
-                */
+                let modelE = new form_experiencia_model_1.ModeloExperiencia();
                 console.log(registroExperiencia);
+                /*
+                  await registroExperiencia.forEach((element: any) => {
+                          let palabra = element.ciudad_id.split('-')
+                      
+                          db.query('SELECT a.ciudad_id FROM ciudad a WHERE ciudad_nom = ? LIMIT 1',[palabra[0]]).then(value =>{
+                             console.log('Esta es la ciuuuu '+value[0].ciudad_id)
+                             const ciudad = value[0].ciudad_id;
+                             modelE.ciudad_id = ciudad;
+                          }).catch(err=>{
+                              console.log(err)
+                          });
+                      });
+                  console.log(modelE.ciudad_id,'Ciudadd id')
+                     */
                 yield registroExperiencia.forEach((element) => {
-                    conection_db_1.default.query('INSERT INTO vacante_hv_experiencia set ?', [element]);
+                    modelE.vacantehv_id = element.vacantehv_id;
+                    modelE.empresa = element.empresa;
+                    modelE.cargo = element.cargo;
+                    //modelE.ciudad_id = element.ciudad_id;
+                    modelE.descripcion = element.descripcion;
+                    modelE.anio_ini = element.anio_ini;
+                    modelE.actualmente = element.actualmente;
+                    modelE.anio_fin = element.anio_fin;
+                    modelE.mes_fin = element.mes_fin;
+                    let palabra = element.ciudad_id.split('-');
+                    conection_db_1.default.query('SELECT a.ciudad_id FROM ciudad a WHERE ciudad_nom = ? LIMIT 1', [palabra[0]]).then(value => {
+                        console.log('Esta es la ciuuuu ' + value[0].ciudad_id);
+                        const ciudad = value[0].ciudad_id;
+                        modelE.ciudad_id = ciudad;
+                    }).catch(err => {
+                        console.log(err);
+                    });
+                    // let city = this.buscarCiudad()
+                    // console.log('esta es la city ',city)
+                    //const sql = db.query('SELECT * FROM ciudad');
+                    // const ciudad = db.query("SELECT a.ciudad_id FROM ciudad a WHERE a.ciudad_id = ? ",[1]);
+                    //console.log('esta es la city ', sql)
+                    //modelE.ciudad_id = ciudad;
+                    //db.query('INSERT INTO vacante_hv_experiencia set ?', [modelE]);
+                    console.log(modelE);
                 });
+                console.log('Terminó la consulta');
                 /*
                await registroFormacion.forEach((element: any) => {
                    db.query('INSERT INTO vacante_hv_formacion set ?', [element]);
@@ -100,6 +117,19 @@ class VacantesController {
             catch (error) {
                 res.status(500).json(error);
             }
+        });
+    }
+    buscarCiudad() {
+        return __awaiter(this, void 0, void 0, function* () {
+            //let palabra = ciudad.split('-')
+            yield conection_db_1.default.query('SELECT a.ciudad_id FROM ciudad a WHERE ciudad_nom = ? LIMIT 1', ['Medellín']).then(value => {
+                //console.log('Esta es la ciuuuu '+value[0].ciudad_id)
+                const ciudad = value[0].ciudad_id;
+                return ciudad;
+                //modelE.ciudad_id = ciudad;
+            }).catch(err => {
+                console.log(err);
+            });
         });
     }
     update(req, res) {

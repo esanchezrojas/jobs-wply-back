@@ -1,3 +1,4 @@
+import { GoogleDriveService } from '../libs/googleDriveService';
 import { Request, Response } from 'express';
 import db from '../conection-db'
 
@@ -6,6 +7,15 @@ class UploadController {
 
 
     async guardar(req: Request, res: Response) {
+
+        const urlDrive = await GoogleDriveService.uploadToGoogleDrive(req.file);
+      //  console.log(req.file?.path,'este es el nombre path')
+      console.log(urlDrive)
+        res.json({
+            message: urlDrive
+            
+        });
+
         /*
             const {title,description} = req.body;
             console.log(req.file?.path)
@@ -19,6 +29,9 @@ class UploadController {
         
             console.log(newPhoto)
         */
+
+
+       /*     
         try {
             console.log(req.file?.path);
             const nomArchivo = req.file?.path
@@ -29,7 +42,7 @@ class UploadController {
             console.log(err)
         }
 
-
+*/
 
     }
 
