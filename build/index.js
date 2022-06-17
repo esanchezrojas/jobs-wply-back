@@ -7,6 +7,8 @@ const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const morgan_1 = __importDefault(require("morgan"));
 const cors_1 = __importDefault(require("cors"));
+const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
+const swagger_1 = __importDefault(require("./docs/swagger"));
 const index_routes_1 = __importDefault(require("./routes/index-routes"));
 const publicacion_vacantes_routes_1 = __importDefault(require("./routes/publicacion-vacantes-routes"));
 const vacante_experiencia_routes_1 = __importDefault(require("./routes/vacante-experiencia-routes"));
@@ -41,11 +43,34 @@ class Server {
         this.app.use('/api/publicVacantes', publicacion_vacantes_routes_1.default);
         this.app.use('/api/experiencia', vacante_experiencia_routes_1.default);
         this.app.use('/api/formacion', vacante_formacion_routes_1.default);
+        /**
+* Post track
+* @openapi
+* /api/listas:
+*    get:
+*      tags:
+*        - listas
+*      summary: "Listas desplegables"
+*      description: Este endpoint es para listar los datos del front
+*      requestBody:
+*          content:
+*            application/json:
+*              schema:
+*                $ref: "#/components/schemas/user"
+*      responses:
+*        '200':
+*          description: Retorna el listado de datos iniciales.
+*        '422':
+*          description: Error de validacion.
+*      security:
+*       - ffofofof: []
+*/
         this.app.use('/api/listas', listas_routes_1.default);
         this.app.use('/api/upload', upload_routes_1.default);
         this.app.use('/api/login', login_routes_1.default);
         this.app.use('/api/signin', signin_routes_1.default);
         this.app.use('/api/signup', signup_routes_1.default);
+        this.app.use('/documentacion', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_1.default));
     }
     start() {
         this.app.listen(this.app.get('port'), () => {

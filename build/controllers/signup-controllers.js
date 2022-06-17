@@ -14,7 +14,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.signupController = void 0;
 const conection_db_1 = __importDefault(require("../conection-db"));
+const encrypt_1 = require("../libs/encrypt");
 class SignupController {
+    constructor() { }
     list(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             let sql = {};
@@ -37,14 +39,21 @@ class SignupController {
      */
     signup(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            let encrypt = new encrypt_1.Encrypt();
+            const user = req.body;
+            // let {user} = req.body;
+            console.log(user);
             try {
-                //const { user } = req.body;
-                const user = req.body;
-                yield conection_db_1.default.query('INSERT user set ?', [user]);
+                const password = yield encrypt.encrypt(user.clave);
+                user.clave = password;
+                console.log(user.clave, 'esta es la contraseña');
+                console.log(password, ' Encriptada');
+                //let modelo = {user}
+                yield conection_db_1.default.query('INSERT usuario_externo set ?', [user]);
                 res.json({ message: 'Registro correcto', status: 200 });
             }
             catch (err) {
-                console.log(err);
+                console.log('Error', err);
                 res.json({ message: 'No se guardaron los datos', status: 401 });
             }
         });

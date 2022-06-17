@@ -16,6 +16,7 @@ exports.signinController = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const conection_db_1 = __importDefault(require("../conection-db"));
 const general_data_1 = require("../config/general-data");
+const encrypt_1 = require("../libs/encrypt");
 class SigninController {
     list(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -39,26 +40,29 @@ class SigninController {
      */
     signin(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { userName, pass } = req.body;
-            yield conection_db_1.default.query('select a.userName,a.roleId from user a where userName = ? and pass = ?', [userName, pass]).then(user => {
-                if (user.length === 0) {
-                    console.log('Esta vacio');
-                    console.log(user);
-                    return res.json({ message: 'Usuario o contraseña incorrecto', status: 401 });
-                }
-                else {
-                    console.log(user[0].userName);
-                    console.log('Ingresó en el esle');
-                    //const newToken = jwt.sign({ userId, username }, config.jwtSecret, { expiresIn: '1h' });
-                    /**Recive un dato tipo object, clave secreta y tiempo que expira */
-                    const token = jsonwebtoken_1.default.sign({ user }, process.env.TOKEN_SECRET || general_data_1.GeneralData.SECRET, { expiresIn: '1h' });
+            let encrypt = new encrypt_1.Encrypt();
+            var { nom_usuario, clave } = req.body;
+            //pass = await encrypt.encrypt(pass)
+            try {
+                const registro = yield conection_db_1.default.query('select a.nom_usuario, a.clave from usuario_externo a where nom_usuario = ? LIMIT 1', [nom_usuario]);
+                const password = registro[0].clave;
+                console.log(registro[0].clave, ' password');
+                //desencrypta la contraseña y devuelve un valor booleano
+                const checkPass = yield encrypt.compare(clave, password);
+                console.log(checkPass);
+                if (checkPass) {
+                    console.log('Inicio de sesion correcto');
+                    const token = jsonwebtoken_1.default.sign({ registro }, process.env.TOKEN_SECRET || general_data_1.GeneralData.SECRET, { expiresIn: '3h' });
                     return res.json({ token, message: 'Inicio de sesión correcto', status: 200 });
                 }
-            }).catch(err => {
-                console.log('Este es el error');
+                else {
+                    return res.json({ message: 'Usuario o contraseña incorrecto', status: 401 });
+                }
+            }
+            catch (err) {
                 console.log(err);
-            });
-            console.log('Termino la consulta');
+                return res.json({ message: err, status: 500 });
+            }
         });
     }
 }

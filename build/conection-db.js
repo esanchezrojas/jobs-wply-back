@@ -9,6 +9,9 @@ const db = promise_mysql_1.default.createPool(keys_1.default.database);
 db.getConnection()
     .then(connection => {
     db.releaseConnection(connection);
-    console.log('DB is connected');
+    console.log('BD conectada');
+}).catch(err => {
+    console.log('no hubo conexión a la BD');
+    //console.warn(err);
 });
 exports.default = db;

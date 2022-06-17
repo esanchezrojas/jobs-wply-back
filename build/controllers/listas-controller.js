@@ -21,8 +21,12 @@ class ListasController {
             try {
                 const ciudad = yield conection_db_1.default.query("select a.ciudad_id,concat(a.ciudad_nom,' - ',b.depto_nom) ciudad from ciudad a inner join departamento b on a.depto_id=b.depto_id where b.pais_id=1 order by ciudad");
                 const nivel = yield conection_db_1.default.query("select clasificador_id,descripcion from clasificador where tipo='NEST' order by descripcion");
+                const estado = yield conection_db_1.default.query("select clasificador_id,descripcion from clasificador where tipo='EACT' order by descripcion");
+                const medio = yield conection_db_1.default.query("select clasificador_id,descripcion from clasificador where tipo='AREA' order by descripcion");
                 sql.ciudad = ciudad;
                 sql.nivel = nivel;
+                sql.estado = estado;
+                sql.medio = medio;
                 res.status(200).json(sql);
             }
             catch (error) {

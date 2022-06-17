@@ -2,11 +2,17 @@ import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken'
 import db from '../conection-db'
 import { GeneralData } from '../config/general-data';
+import {Encrypt} from '../libs/encrypt'
 
 class SignupController {
 
+    constructor(
+      
+    ){}
+
     public async list(req: Request, res: Response) {
         let sql: any = {};
+        
         try {
 
             const user: any = await db.query("select * from user ");
@@ -28,14 +34,25 @@ class SignupController {
      * @returns 
      */
     async signup(req: Request, res: Response) {
-        try{
-        //const { user } = req.body;
+        let encrypt = new Encrypt();
         const user = req.body;
-        await db.query('INSERT user set ?', [user]);
+        // let {user} = req.body;
+        console.log(user)
+        try{
+        
+        
+        const password = await encrypt.encrypt(user.clave)
+        user.clave = password;
+        console.log(user.clave,'esta es la contraseña')
+        console.log( password, ' Encriptada' )
+        //let modelo = {user}
+      
+        await db.query('INSERT usuario_externo set ?', [user]);
         res.json({message:'Registro correcto',status:200});
         }catch(err){
-            console.log(err)
+            console.log('Error', err)
             res.json({message:'No se guardaron los datos',status:401})
+
         }
       
     }

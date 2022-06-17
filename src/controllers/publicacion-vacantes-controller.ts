@@ -2,18 +2,25 @@ import { Request, Response } from 'express';
 import db from '../conection-db'
 import { ModeloExperiencia } from '../models/form-experiencia.model'
 
+const model: any = [];
 class VacantesController {
 
-
+    experiencia: any = [];
+    exper: any = {}
     constructor(
 
     ) { }
 
-    public async list(req: Request, res: Response) {
+    /**
+     * Lista la informacion de las vacantes con estado A
+     * @param req 
+     * @param res 
+     */
+    async list(req: Request, res: Response) {
 
         try {
 
-            const sql = await db.query('SELECT a.reqpersonal_id as id,a.nombre as nombreVacante,a.imagen,a.cantidad as c_vacantes,a.proposito,a.horario,a.descripcion,b.nombre as ciudad, b.id as ciudad_id, c.nombre as area FROM vacante_publicacion a LEFT JOIN ciudades b ON a.ciudad_id = b.id LEFT JOIN area c ON a.area_id = c.id LEFT JOIN contrato d ON a.tipocontrato_id = d.id WHERE a.estado = "A"');
+            const sql = await db.query('SELECT a.reqpersonal_id as id,a.nombre as nombreVacante,a.imagen,a.cantidad as c_vacantes,a.proposito,a.horario,a.descripcion,b.ciudad_nom as ciudad , c.descripcion as area, d.descripcion as tipo_de_contrato FROM vacante_publicacion a LEFT JOIN ciudad b ON a.ciudad_id = b.ciudad_id LEFT JOIN proceso c ON a.area_id = c.proceso_id LEFT JOIN clasificador d ON a.tipocontrato_id = d.clasificador_id WHERE a.estado = "A"');
 
             for (let i = 0; i < sql.length; i++) {
 
@@ -62,111 +69,104 @@ class VacantesController {
      */
     public async create(req: Request, res: Response) {
 
-        //console.log(req.body)
-        //res.json({ message: 'Vacante guardada' });
-        // console.log('este es el body ',req.body.registroIni)
+        console.log(req.body)
+        const registroInicial = req.body.registroIni;
+        const registroExperiencia = req.body.experiencia;
+        const registroFormacion = req.body.formacion;
 
-        try {
+        try{
 
-
-            const registroInicial = req.body.registroIni;
-            const registroExperiencia = req.body.experiencia;
-            const registroFormacion = req.body.formacion;
-
-           
-            let modelE = new ModeloExperiencia();
-
-            console.log(registroExperiencia)
-
-          /*
-            await registroExperiencia.forEach((element: any) => {
-                    let palabra = element.ciudad_id.split('-')
-                
-                    db.query('SELECT a.ciudad_id FROM ciudad a WHERE ciudad_nom = ? LIMIT 1',[palabra[0]]).then(value =>{
-                       console.log('Esta es la ciuuuu '+value[0].ciudad_id)
-                       const ciudad = value[0].ciudad_id;
-                       modelE.ciudad_id = ciudad;
-                    }).catch(err=>{
-                        console.log(err)
-                    });
-                });
-            console.log(modelE.ciudad_id,'Ciudadd id')
-               */
-              await registroExperiencia.forEach((element: any) => {
-
-               
-
-                modelE.vacantehv_id = element.vacantehv_id;
-                modelE.empresa = element.empresa;
-                modelE.cargo = element.cargo;
-                //modelE.ciudad_id = element.ciudad_id;
-                modelE.descripcion = element.descripcion;
-                modelE.anio_ini = element.anio_ini;
-                modelE.actualmente = element.actualmente;
-                modelE.anio_fin = element.anio_fin;
-                modelE.mes_fin = element.mes_fin;
-
-                let palabra = element.ciudad_id.split('-')
-                
-                db.query('SELECT a.ciudad_id FROM ciudad a WHERE ciudad_nom = ? LIMIT 1',[palabra[0]]).then(value =>{
-                   console.log('Esta es la ciuuuu '+value[0].ciudad_id)
-                   const ciudad = value[0].ciudad_id;
-                   modelE.ciudad_id = ciudad;
-                }).catch(err=>{
-                    console.log(err)
-                });
-
-                
+         
+        
+        //Paso 1
+        //Esta funcion se debe ejecutar de primero, guarda el registro datos iniciales
+        const registro = await db.query('INSERT INTO vacante_hv set ?', [registroInicial]);
+        const insertId = registro.insertId;
+        console.log(insertId,' Este es el insert id');
 
 
-               // let city = this.buscarCiudad()
-               // console.log('esta es la city ',city)
+        //Actualizamos el valor de ciudad_id por el id correspondiente en la base de datos
+        for (let i = 0; i < registroExperiencia.length; i++) {
 
-                
-                //const sql = db.query('SELECT * FROM ciudad');
-               // const ciudad = db.query("SELECT a.ciudad_id FROM ciudad a WHERE a.ciudad_id = ? ",[1]);
+            
 
-                //console.log('esta es la city ', sql)
-                
-                //modelE.ciudad_id = ciudad;
+            registroExperiencia[i].vacantehv_id = insertId;
+            console.log(registroExperiencia[i].vacantehv_id,' vacante_hv')
 
-                //db.query('INSERT INTO vacante_hv_experiencia set ?', [modelE]);
-                console.log(modelE)
-            });
 
-            console.log('Terminó la consulta')
-            /*
-           await registroFormacion.forEach((element: any) => {
-               db.query('INSERT INTO vacante_hv_formacion set ?', [element]);
-           });
+            let ciudad = registroExperiencia[i].ciudad_id.split('-')
+            console.log('ciudad', ciudad)
+            const ciudadId = await db.query('SELECT a.ciudad_id FROM ciudad a WHERE a.ciudad_nom = ? LIMIT 1', [ciudad[0]]);
 
-           await db.query('INSERT INTO vacante_hv set ?', [registroInicial]);
-           */
-            res.json({ message: 'Vacante guardada' });
+            registroExperiencia[i].ciudad_id = ciudadId[0].ciudad_id;
 
-        } catch (error) {
-            res.status(500).json(error)
+            
+             console.log('vacante id', registroExperiencia[i].vacantehv_id)
+            console.log(' Final array ',registroExperiencia)
         }
 
-    }
 
-        async buscarCiudad(){
-
-
-        //let palabra = ciudad.split('-')
-                
-        await db.query('SELECT a.ciudad_id FROM ciudad a WHERE ciudad_nom = ? LIMIT 1',['Medellín']).then(value =>{
-           //console.log('Esta es la ciuuuu '+value[0].ciudad_id)
-           const ciudad = value[0].ciudad_id;
-           return ciudad;
-           //modelE.ciudad_id = ciudad;
-        }).catch(err=>{
-            console.log(err)
+      
+        //Paso 2
+        //Guarda el registro Experiencia
+        await registroExperiencia.forEach((element: any) => {
+            db.query('INSERT INTO vacante_hv_experiencia set ?', [element]);
+            console.log('Terminó la consulta')
         });
+
+          
+
+        console.log(registroFormacion, ' este es el reg')
+        //Actualizamos el valor de ciudad_id por el id correspondiente en la base de datos
+        for (let i = 0; i < registroFormacion.length; i++) {
+
+
+            registroFormacion[i].vacantehv_id = insertId;
+            console.log(registroFormacion[i].vacantehv_id,' vacante_hv')
+
+            
+            let nivel = registroFormacion[i].nivel_id;
+            const nivelId = await db.query('SELECT a.clasificador_id FROM clasificador a WHERE a.descripcion = ? LIMIT 1', [nivel]);
+            registroFormacion[i].nivel_id = nivelId[0].clasificador_id;
+            console.log('nivel id', registroFormacion[i].nivel_id)
+
+            let estado = registroFormacion[i].estado_id;
+            const estadoId = await db.query('SELECT a.clasificador_id FROM clasificador a WHERE a.descripcion = ? LIMIT 1', [estado]);
+            registroFormacion[i].estado_id = estadoId[0].clasificador_id;
+            console.log('estado id', registroFormacion[i].estado_id)
+
+            console.log('esto es el registro form', registroFormacion)
+
+
+        }
+        
+        
+        //Paso 3
+        //Guarda el registro Formación
+        await registroFormacion.forEach((element: any) => {
+            db.query('INSERT INTO vacante_hv_formacion set ?', [element]);
+        });
+        
+
+        res.json({ message: 'Vacante guardada' });
+        
+    }catch(err){
+
+        console.log('Error ', err)
+
     }
 
-  
+        
 
+    }
+
+
+
+    /**
+     * Actualiza los datos
+     * @param req 
+     * @param res 
+     */
     public update(req: Request, res: Response) {
         const { id } = req.params;
         db.query('UPDATE games SET ? WHERE id = ?', [req.body, id]);

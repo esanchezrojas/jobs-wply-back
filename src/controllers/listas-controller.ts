@@ -11,8 +11,14 @@ class ListasController {
 
         const nivel:any = await db.query("select clasificador_id,descripcion from clasificador where tipo='NEST' order by descripcion");
 
+        const estado:any = await db.query("select clasificador_id,descripcion from clasificador where tipo='EACT' order by descripcion");
+
+        const medio:any = await db.query("select clasificador_id,descripcion from clasificador where tipo='AREA' order by descripcion");
+
         sql.ciudad = ciudad;
         sql.nivel = nivel;
+        sql.estado = estado;
+        sql.medio = medio;
 
 
             res.status(200).json(sql);
