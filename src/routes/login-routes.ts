@@ -15,6 +15,8 @@ class LoginRoutes {
     config(): void {
 
         //this.router.get('/',middleware,vacantesController.list );
+
+        
         
         this.router.get('/',loginController.list );
        this.router.post('/',validacionToken.verifyToken,loginController.test);

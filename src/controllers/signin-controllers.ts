@@ -36,11 +36,23 @@ class SigninController {
 
         var { nom_usuario, clave } = req.body;
 
+        console.log(req.body)
+
          //pass = await encrypt.encrypt(pass)
 
         try{
     
-         const registro = await db.query('select a.nom_usuario, a.clave from usuario_externo a where nom_usuario = ? LIMIT 1',[nom_usuario])
+         const registro:any = await db.query('select a.nom_usuario, a.clave from usuario_externo a where nom_usuario = ? LIMIT 1',[nom_usuario])
+
+         console.log(typeof(registro))
+         console.log(registro)
+         
+         
+         if(registro == undefined || registro == null || Object.entries(registro).length === 0){
+            console.log('vvcmcmcm')
+            return  res.status(200).json({message:'Usuario no existe',status:401})
+         }
+         
          const password = registro[0].clave;
          console.log(registro[0].clave, ' password')
          
@@ -75,3 +87,7 @@ class SigninController {
 
 
 export const signinController = new SigninController();
+
+function err(err: any): any {
+    throw new Error('Function not implemented.');
+}

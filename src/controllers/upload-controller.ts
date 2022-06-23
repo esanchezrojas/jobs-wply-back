@@ -8,7 +8,11 @@ class UploadController {
 
     async guardar(req: Request, res: Response) {
 
-        const urlDrive = await GoogleDriveService.uploadToGoogleDrive(req.file);
+       // console.log(req.body, 'este es el objeto')
+        const {carpeta} = req.body;
+        console.log(carpeta, 'este es el objeto')
+
+        const urlDrive = await GoogleDriveService.uploadToGoogleDrive(req.file,carpeta);
       //  console.log(req.file?.path,'este es el nombre path')
       console.log(urlDrive)
         res.json({

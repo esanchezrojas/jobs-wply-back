@@ -15,7 +15,7 @@ class UploadRoutes {
 
         //this.router.get('/',middleware,vacantesController.list );
 
-        this.router.post('/', multer.getInstance().single('files'), uploadController.guardar);
+        this.router.post('/', multer.getInstance().single('file'), uploadController.guardar);
         this.router.get('/', uploadController.list);
         this.router.put('/', uploadController.update);
 

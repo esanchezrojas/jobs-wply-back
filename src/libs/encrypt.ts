@@ -4,8 +4,8 @@ import bcrypt from 'bcryptjs';
 export class Encrypt {
 
     /**
-     * 
-     * @param textPlain Encriptamos
+     * Encriptamos
+     * @param textPlain 
      * @returns 
      */
 async encrypt(textPlain: any) {

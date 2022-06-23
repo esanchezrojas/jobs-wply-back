@@ -52,28 +52,7 @@ class Server {
         this.app.use('/api/experiencia',experienciaRoutes)
         this.app.use('/api/formacion',formacionRoutes)
 
-         /**
- * Post track
- * @openapi
- * /api/listas:
- *    get:
- *      tags:
- *        - listas
- *      summary: "Listas desplegables"
- *      description: Este endpoint es para listar los datos del front 
- *      requestBody:
- *          content:
- *            application/json:
- *              schema:
- *                $ref: "#/components/schemas/user"
- *      responses:
- *        '200':
- *          description: Retorna el listado de datos iniciales.
- *        '422':
- *          description: Error de validacion.
- *      security:
- *       - ffofofof: []
- */
+       
         this.app.use('/api/listas',listasRoutes)
         this.app.use('/api/upload',uploadRoutes)
         this.app.use('/api/login',loginRoutes)

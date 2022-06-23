@@ -10,6 +10,28 @@ class SigninRoutes {
     config() {
         //this.router.get('/',middleware,vacantesController.list );
         this.router.get('/', signin_controllers_1.signinController.list);
+        /**
+* Post track
+* @openapi
+* /api/signin/:
+*    get:
+*      tags:
+*        - signin
+*      summary: "Loguin"
+*      description: Este endpoint permite realizar el loguin
+*      requestBody:
+*          content:
+*            application/json:
+*              schema:
+*                $ref: "#/components/schemas/user"
+*      responses:
+*        '200':
+*          description: Retorna el mensaje de loguin correcto.
+*        '422':
+*          description: Error de validacion.
+*      security:
+*       - ffofofof: []
+*/
         this.router.post('/', signin_controllers_1.signinController.signin);
     }
 }

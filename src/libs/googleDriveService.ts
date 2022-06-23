@@ -40,18 +40,33 @@ export class GoogleDriveService {
     };
 
 
-    static uploadToGoogleDrive = async (file: any) => {
+    static uploadToGoogleDrive = async (file: any,carpeta:string) => {
         
         //Se obtiene la autenticación
         const auth = GoogleDriveService.getAuth();
 
-        
-        const fileMetadata = {
+        console.log('nombre de la carpeta en el service',file)
+
+        const fieldname = file.fieldname;
+        console.log(fieldname,'Este es el nopbre')
+       
+        if(fieldname == 'fileHv'){
+            console.log('Ingreso pv')
+        var fileMetadata = {
+           
             //Se agrega nombre a el archivo
             name: uuidv4()+"_"+file.originalname,
             //Se agraga el id de la ruta en el drive
-            parents: ["14DnuPfQXdJ_4-Sm9Uhvpc-0Hvp7ORYss"], // Change it according to your desired parent folder id
+            parents: ["17AnQ8bbdXewaG-FIUw_clh2QhyrVAs_0"], // Change it according to your desired parent folder id
         };
+    }else{
+         fileMetadata = {
+            //Se agrega nombre a el archivo
+            name: uuidv4()+"_"+file.originalname,
+            //Se agraga el id de la ruta en el drive
+            parents: ["1P3hxSMcSds2_bXZPD2EdPO9qILIyfLGA"], // Change it according to your desired parent folder id
+        };
+    }
 
         const media = {
              mimeType: file.mimetype,

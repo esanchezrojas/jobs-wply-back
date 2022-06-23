@@ -18,7 +18,10 @@ const conection_db_1 = __importDefault(require("../conection-db"));
 class UploadController {
     guardar(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const urlDrive = yield googleDriveService_1.GoogleDriveService.uploadToGoogleDrive(req.file);
+            // console.log(req.body, 'este es el objeto')
+            const { carpeta } = req.body;
+            console.log(carpeta, 'este es el objeto');
+            const urlDrive = yield googleDriveService_1.GoogleDriveService.uploadToGoogleDrive(req.file, carpeta);
             //  console.log(req.file?.path,'este es el nombre path')
             console.log(urlDrive);
             res.json({

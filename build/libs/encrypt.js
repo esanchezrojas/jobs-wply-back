@@ -16,8 +16,8 @@ exports.Encrypt = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 class Encrypt {
     /**
-     *
-     * @param textPlain Encriptamos
+     * Encriptamos
+     * @param textPlain
      * @returns
      */
     encrypt(textPlain) {

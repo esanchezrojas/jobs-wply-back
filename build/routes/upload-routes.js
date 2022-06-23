@@ -13,7 +13,7 @@ class UploadRoutes {
     }
     config() {
         //this.router.get('/',middleware,vacantesController.list );
-        this.router.post('/', multer_1.default.getInstance().single('files'), upload_controller_1.uploadController.guardar);
+        this.router.post('/', multer_1.default.getInstance().single('file'), upload_controller_1.uploadController.guardar);
         this.router.get('/', upload_controller_1.uploadController.list);
         this.router.put('/', upload_controller_1.uploadController.update);
     }
