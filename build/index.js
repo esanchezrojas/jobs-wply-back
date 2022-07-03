@@ -15,9 +15,9 @@ const vacante_experiencia_routes_1 = __importDefault(require("./routes/vacante-e
 const vacante_formacion_routes_1 = __importDefault(require("./routes/vacante-formacion-routes"));
 const listas_routes_1 = __importDefault(require("./routes/listas-routes"));
 const upload_routes_1 = __importDefault(require("./routes/upload-routes"));
-const login_routes_1 = __importDefault(require("./routes/login-routes"));
 const signin_routes_1 = __importDefault(require("./routes/signin-routes"));
 const signup_routes_1 = __importDefault(require("./routes/signup-routes"));
+const form_apply_routes_1 = __importDefault(require("./routes/form-apply-routes"));
 //Inicializamos las variables de entorno .env
 dotenv_1.default.config();
 console.log(process.env.TESTING);
@@ -45,9 +45,9 @@ class Server {
         this.app.use('/api/formacion', vacante_formacion_routes_1.default);
         this.app.use('/api/listas', listas_routes_1.default);
         this.app.use('/api/upload', upload_routes_1.default);
-        this.app.use('/api/login', login_routes_1.default);
         this.app.use('/api/signin', signin_routes_1.default);
         this.app.use('/api/signup', signup_routes_1.default);
+        this.app.use('/api/formApply', form_apply_routes_1.default);
         this.app.use('/documentacion', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_1.default));
     }
     start() {

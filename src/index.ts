@@ -11,9 +11,9 @@ import experienciaRoutes from './routes/vacante-experiencia-routes';
 import formacionRoutes from './routes/vacante-formacion-routes';
 import listasRoutes from './routes/listas-routes';
 import uploadRoutes from './routes/upload-routes';
-import loginRoutes from './routes/login-routes';
 import signinRoutes from './routes/signin-routes';
 import signupRoutes from './routes/signup-routes';
+import formApplyRoutes from './routes/form-apply-routes';
 
 
 //Inicializamos las variables de entorno .env
@@ -55,9 +55,10 @@ class Server {
        
         this.app.use('/api/listas',listasRoutes)
         this.app.use('/api/upload',uploadRoutes)
-        this.app.use('/api/login',loginRoutes)
         this.app.use('/api/signin',signinRoutes)
         this.app.use('/api/signup',signupRoutes)
+        this.app.use('/api/formApply',formApplyRoutes)
+
         this.app.use('/documentacion',swaggerUi.serve, swaggerUi.setup(swaggerSetup))
     }
 

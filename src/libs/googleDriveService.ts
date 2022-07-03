@@ -40,7 +40,7 @@ export class GoogleDriveService {
     };
 
 
-    static uploadToGoogleDrive = async (file: any,carpeta:string) => {
+    static uploadToGoogleDrive = async (file: any) => {
         
         //Se obtiene la autenticación
         const auth = GoogleDriveService.getAuth();
@@ -50,7 +50,7 @@ export class GoogleDriveService {
         const fieldname = file.fieldname;
         console.log(fieldname,'Este es el nopbre')
        
-        if(fieldname == 'fileHv'){
+        if(true){
             console.log('Ingreso pv')
         var fileMetadata = {
            

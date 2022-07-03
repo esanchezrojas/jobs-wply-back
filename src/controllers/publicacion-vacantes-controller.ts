@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import db from '../conection-db'
-import { ModeloExperiencia } from '../models/form-experiencia.model'
+import { ModeloVacantePostulacion } from '../models/vacante_postulacion.model'
+import { ModeloVacanteCruzada } from '../models/vacante_cruzada.model'
 
 const model: any = [];
 class VacantesController {
@@ -20,7 +21,7 @@ class VacantesController {
 
         try {
 
-            const sql = await db.query('SELECT a.reqpersonal_id as id,a.nombre as nombreVacante,a.imagen,a.cantidad as c_vacantes,a.proposito,a.horario,a.descripcion,b.ciudad_nom as ciudad , c.descripcion as area, d.descripcion as tipo_de_contrato FROM vacante_publicacion a LEFT JOIN ciudad b ON a.ciudad_id = b.ciudad_id LEFT JOIN proceso c ON a.area_id = c.proceso_id LEFT JOIN clasificador d ON a.tipocontrato_id = d.clasificador_id WHERE a.estado = "A"');
+            const sql = await db.query('SELECT a.reqpersonal_id AS id,a.nombre AS nombreVacante,a.imagen,a.cantidad AS c_vacantes,a.proposito,a.horario,a.descripcion,b.ciudad_nom AS ciudad , c.descripcion AS area, d.descripcion AS tipo_de_contrato FROM vacante_publicacion a LEFT JOIN ciudad b ON a.ciudad_id = b.ciudad_id LEFT JOIN proceso c ON a.area_id = c.proceso_id LEFT JOIN clasificador d ON a.tipocontrato_id = d.clasificador_id WHERE a.estado = "A" AND date(now())>=a.fecha_ini AND date(now())<=a.fecha_fin');
 
             for (let i = 0; i < sql.length; i++) {
 
@@ -79,7 +80,7 @@ class VacantesController {
 
 
             //Paso 1
-            //Esta funcion se debe ejecutar de primero, guarda el registro datos iniciales
+            //Esta funcion se debe ejecutar primero, guarda el registro datos iniciales
             const registro = await db.query('INSERT INTO vacante_hv set ?', [registroInicial]);
             const insertId = registro.insertId;
             console.log(insertId, ' Este es el insert id');
@@ -147,12 +148,35 @@ class VacantesController {
                 db.query('INSERT INTO vacante_hv_formacion set ?', [element]);
             });
 
+            
+            /*
+            const vacantepub = await db.query('SELECT a.vacantepub_id FROM vacante_publicacion a WHERE a.reqpersonal_id = ? LIMIT 1', [registroInicial.reqpersonal_id]);
 
-            res.json({ message: 'Vacante guardada' });
+            console.log(registroInicial.reqpersonal_id, 'esta es la vc',vacantepub[0].vacantepub_id)
+
+            
+            let modelVC = new ModeloVacanteCruzada();
+
+            modelVC.vacantepub_id = vacantepub[0].vacantepub_id;
+
+            await db.query('INSERT INTO vacante_cruzada set ?', [modelVC]);
+
+            let modelVP = new ModeloVacantePostulacion();
+            modelVP.vacantepub_id = vacantepub;
+
+            await db.query('INSERT INTO vacante_postulacion set ?', [modelVP]);
+
+            */
+            
+
+
+
+            res.status(200).json({ message: 'Vacante guardada' });
 
         } catch (err) {
 
             console.log('Error ', err)
+            res.status(500).json({ message: 'Error de servidor' });
 
         }
 

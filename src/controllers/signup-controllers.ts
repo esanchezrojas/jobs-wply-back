@@ -2,7 +2,8 @@ import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken'
 import db from '../conection-db'
 import { GeneralData } from '../config/general-data';
-import {Encrypt} from '../libs/encrypt'
+import {Encrypt} from '../libs/encrypt';
+import {ModeloVacanteHv} from '../models/vacante_hv.models'
 
 class SignupController {
 
@@ -48,6 +49,16 @@ class SignupController {
         //let modelo = {user}
       
         await db.query('INSERT usuario_externo set ?', [user]);
+
+        let modeloVH = new ModeloVacanteHv();
+
+        modeloVH.cod_unico_registro = user.cod_unico_registro;
+        modeloVH.nombres = user.nombres;
+        modeloVH.apellidos = user.apellidos;
+        modeloVH.email = user.email;
+
+        await db.query('INSERT vacante_hv set ?', [modeloVH]);
+
         res.json({message:'Registro correcto',status:200});
         }catch(err){
             console.log('Error', err)

@@ -50,13 +50,13 @@ GoogleDriveService.authenticateGoogle = () => {
     googleapis_1.google.options({ auth });
     return auth;
 };
-GoogleDriveService.uploadToGoogleDrive = (file, carpeta) => __awaiter(void 0, void 0, void 0, function* () {
+GoogleDriveService.uploadToGoogleDrive = (file) => __awaiter(void 0, void 0, void 0, function* () {
     //Se obtiene la autenticación
     const auth = GoogleDriveService.getAuth();
     console.log('nombre de la carpeta en el service', file);
     const fieldname = file.fieldname;
     console.log(fieldname, 'Este es el nopbre');
-    if (fieldname == 'fileHv') {
+    if (true) {
         console.log('Ingreso pv');
         var fileMetadata = {
             //Se agrega nombre a el archivo

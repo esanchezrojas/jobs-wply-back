@@ -8,13 +8,26 @@ class UploadController {
 
     async guardar(req: Request, res: Response) {
 
-       // console.log(req.body, 'este es el objeto')
-        const {carpeta} = req.body;
-        console.log(carpeta, 'este es el objeto')
+        const {num_unico_hv,nombre} = req.body;
+        console.log('este es el nombre del archivo enviado req '+nombre)
 
-        const urlDrive = await GoogleDriveService.uploadToGoogleDrive(req.file,carpeta);
+       
+      
+        const urlDrive = await GoogleDriveService.uploadToGoogleDrive(req.file);
+
+        if(nombre == 'hv'){
+        await  db.query( 'UPDATE vacante_hv SET nomarchivo_hv = ? WHERE num_unico_hv = ?', [urlDrive,num_unico_hv]);
+        }else{
+            await  db.query( 'UPDATE vacante_hv SET nomarchivo_portafolio = ? WHERE num_unico_hv = ?', [urlDrive,num_unico_hv]);
+        }
+     //  await  db.query('INSERT INTO vacante_hv set ? where num_unico_hv = ?', [urlDrive,nomFile]);
+       // const {carpeta} = req.body;
+      
+
+       
+
       //  console.log(req.file?.path,'este es el nombre path')
-      console.log(urlDrive)
+      console.log('esta es la url ',urlDrive)
         res.json({
             message: urlDrive
             

@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.signupController = void 0;
 const conection_db_1 = __importDefault(require("../conection-db"));
 const encrypt_1 = require("../libs/encrypt");
+const vacante_hv_models_1 = require("../models/vacante_hv.models");
 class SignupController {
     constructor() { }
     list(req, res) {
@@ -50,6 +51,12 @@ class SignupController {
                 console.log(password, ' Encriptada');
                 //let modelo = {user}
                 yield conection_db_1.default.query('INSERT usuario_externo set ?', [user]);
+                let modeloVH = new vacante_hv_models_1.ModeloVacanteHv();
+                modeloVH.cod_unico_registro = user.cod_unico_registro;
+                modeloVH.nombres = user.nombres;
+                modeloVH.apellidos = user.apellidos;
+                modeloVH.email = user.email;
+                yield conection_db_1.default.query('INSERT vacante_hv set ?', [modeloVH]);
                 res.json({ message: 'Registro correcto', status: 200 });
             }
             catch (err) {

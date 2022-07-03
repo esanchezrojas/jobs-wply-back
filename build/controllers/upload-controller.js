@@ -18,12 +18,19 @@ const conection_db_1 = __importDefault(require("../conection-db"));
 class UploadController {
     guardar(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            // console.log(req.body, 'este es el objeto')
-            const { carpeta } = req.body;
-            console.log(carpeta, 'este es el objeto');
-            const urlDrive = yield googleDriveService_1.GoogleDriveService.uploadToGoogleDrive(req.file, carpeta);
+            const { num_unico_hv, nombre } = req.body;
+            console.log('este es el nombre del archivo enviado req ' + nombre);
+            const urlDrive = yield googleDriveService_1.GoogleDriveService.uploadToGoogleDrive(req.file);
+            if (nombre == 'hv') {
+                yield conection_db_1.default.query('UPDATE vacante_hv SET nomarchivo_hv = ? WHERE num_unico_hv = ?', [urlDrive, num_unico_hv]);
+            }
+            else {
+                yield conection_db_1.default.query('UPDATE vacante_hv SET nomarchivo_portafolio = ? WHERE num_unico_hv = ?', [urlDrive, num_unico_hv]);
+            }
+            //  await  db.query('INSERT INTO vacante_hv set ? where num_unico_hv = ?', [urlDrive,nomFile]);
+            // const {carpeta} = req.body;
             //  console.log(req.file?.path,'este es el nombre path')
-            console.log(urlDrive);
+            console.log('esta es la url ', urlDrive);
             res.json({
                 message: urlDrive
             });
