@@ -18,15 +18,18 @@ const conection_db_1 = __importDefault(require("../conection-db"));
 const general_data_1 = require("../config/general-data");
 const encrypt_1 = require("../libs/encrypt");
 const emailer_1 = require("../libs/emailer");
+const templates_email_1 = require("../config/templates-email");
 class SigninController {
     constructor() { }
     list(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            let forgot = new templates_email_1.Templates('Edwin');
+            let template = forgot.forgot();
             const user = {
                 correo: 'edwinsanchez.ad6@gmail.com',
                 nombre: 'Edwin Sánchez Rojas',
                 subject: 'Bienvenido esto es una prueba',
-                html: `<h1>Hola Mundo</h1>`
+                html: template
             };
             let emailer = new emailer_1.Emailer(user);
             //emailer.sendMail();
@@ -90,7 +93,7 @@ class SigninController {
                 if (checkPass) {
                     console.log('Inicio de sesion correcto');
                     //expireIn: 1 (segundos)
-                    const token = jsonwebtoken_1.default.sign({ registro }, process.env.TOKEN_SECRET || general_data_1.GeneralData.SECRET, { expiresIn: '3h' });
+                    const token = jsonwebtoken_1.default.sign({ registro }, process.env.TOKEN_SECRET || general_data_1.GeneralData.jwtSecret, { expiresIn: '3h' });
                     return res.json({ token, message: 'Inicio de sesión correcto', status: 200, registro: registro[0] });
                 }
                 else {

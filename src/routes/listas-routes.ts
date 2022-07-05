@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import {listasController } from '../controllers/listas-controller';
+import { checkJwt } from '../middlewares/jwt';
 
 class ListasRoutes {
 
@@ -37,6 +38,7 @@ class ListasRoutes {
  *      security:
  *       - ffofofof: []
  */
+        //this.router.get('/',[checkJwt],listasController.list );
         this.router.get('/',listasController.list );
         this.router.post('/', listasController.create);
        

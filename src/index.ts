@@ -1,3 +1,4 @@
+import { forgotPasswordController } from './controllers/forgot-password-controllers';
 import express, { Application } from 'express';
 import dotenv from 'dotenv';
 import morgan from 'morgan';
@@ -14,6 +15,8 @@ import uploadRoutes from './routes/upload-routes';
 import signinRoutes from './routes/signin-routes';
 import signupRoutes from './routes/signup-routes';
 import formApplyRoutes from './routes/form-apply-routes';
+import forgotPasswordRoutes from './routes/forgot-password-routes';
+import loginRoutes from './routes/login-routes';
 
 
 //Inicializamos las variables de entorno .env
@@ -58,6 +61,9 @@ class Server {
         this.app.use('/api/signin',signinRoutes)
         this.app.use('/api/signup',signupRoutes)
         this.app.use('/api/formApply',formApplyRoutes)
+        this.app.use('/api/recuperar',forgotPasswordRoutes)
+        this.app.use('/api/login',loginRoutes)
+
 
         this.app.use('/documentacion',swaggerUi.serve, swaggerUi.setup(swaggerSetup))
     }

@@ -1,4 +1,3 @@
-
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken'
 import db from '../conection-db'
@@ -6,81 +5,14 @@ import { GeneralData } from '../config/general-data';
 import {Encrypt} from '../libs/encrypt';
 import nodemailer from 'nodemailer';
 import {Emailer} from '../libs/emailer'
-import {Templates} from '../config/templates-email';
 
 
-class SigninController {
-    
-    constructor
-    (
-        
-    ){}
+class LoginController {
 
+    //sigin registro 
     public async list(req: Request, res: Response) {
 
-        let forgot = new Templates('Edwin');
-        let template = forgot.forgot()
-
         
-
-       const user = {
-        correo:'edwinsanchez.ad6@gmail.com',
-        nombre: 'Edwin Sánchez Rojas',
-        subject: 'Bienvenido esto es una prueba',
-        html: template
-       }
-       let emailer = new Emailer(user)
-
-      
-        //emailer.sendMail();
-        return res.status(200).json({msg:'correo enviado'})
-
-
-
-        
-        
-        /*
-     const config = nodemailer.createTransport({
-            host: 'smtp.mailtrap.io',
-            port: 587,
-            auth: {
-                user: '1ba32909aa9c36',
-                pass: '02f1d8965b64c5'
-            }
-        });
-
-        const opciones = {
-            from: 'Programación',
-            subject: 'Asuntoooo',
-            to: 'edwinsanchez.ad6@gmail.com',
-            text: 'Cuerpo',
-            html: `<b>Hola Mundo!!</b>`
-
-        };
-
-        config.sendMail(opciones,(error,result)=>{
-
-            if(error) {
-                return res.status(500).json({msg:'no se envió '+error})
-            }else{
-            return res.status(200).json({msg:'correo enviado'})
-            }
-        });
-        
-       */
-
-       
-
-    }
-
-    /**
-     * Inicio de sesion
-     * @param req 
-     * @param res 
-     * @returns 
-     */
-    async signin(req: Request, res: Response) {
-
         let encrypt = new Encrypt();
 
         var { email, clave } = req.body;
@@ -114,9 +46,7 @@ class SigninController {
 
              if(checkPass){
 
-                
-             
-                 console.log('Inicio de sesion correcto')
+                console.log('Inicio de sesion correcto')
                  //expireIn: 1 (segundos)
                  const token: any = jwt.sign({ registro }, process.env.TOKEN_SECRET || GeneralData.jwtSecret,{expiresIn:'3h'});
                  return res.json({token,message:'Inicio de sesión correcto',status:200,registro:registro[0]});
@@ -132,17 +62,13 @@ class SigninController {
             }
         
         }
+    }
 
-
-
-}
-
-
+   
 
 
 
 
 
-export const signinController = new SigninController();
 
-
+export const loginController = new LoginController();

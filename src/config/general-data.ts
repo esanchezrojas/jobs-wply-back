@@ -1,5 +1,5 @@
 export namespace GeneralData {
-    export const SECRET = '4qu1l4';
+    export const jwtSecret = '4qu1l4';
    
    
 

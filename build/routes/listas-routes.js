@@ -31,6 +31,7 @@ class ListasRoutes {
 *      security:
 *       - ffofofof: []
 */
+        //this.router.get('/',[checkJwt],listasController.list );
         this.router.get('/', listas_controller_1.listasController.list);
         this.router.post('/', listas_controller_1.listasController.create);
     }

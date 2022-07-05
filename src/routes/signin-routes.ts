@@ -1,6 +1,7 @@
-import { validacionToken } from '../middlewares/validacionToken';
+import { checkJwt } from '../middlewares/jwt';
 import { Router } from 'express';
 import {signinController } from '../controllers/signin-controllers';
+
 
 
 class SigninRoutes {
